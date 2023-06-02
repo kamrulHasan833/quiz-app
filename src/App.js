@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./assets/styles/global.css";
+import Layout from "./components/Layout";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
+import Home from "./components/pages/Home";
+import Login from "./components/pages/Login";
+import Quiz from "./components/pages/Quiz";
+import Result from "./components/pages/Result";
+import Signup from "./components/pages/Signup";
+import { AuthProvider } from "./context/AuthContext";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<PublicRoute />}>
+              <Route path="" element={<Signup />} />
+            </Route>
+            <Route path="/login" element={<PublicRoute />}>
+              <Route path="" element={<Login />} />
+            </Route>
+            <Route path="/quiz" element={<PrivateRoute />}>
+              <Route path=":id" element={<Quiz />} />
+            </Route>
+            <Route path="/result" element={<PrivateRoute />}>
+              <Route path=":id" element={<Result />} />
+            </Route>
+          </Routes>
+        </Layout>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
